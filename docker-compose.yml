@@ -1,0 +1,15 @@
+# PostgreSQL local pour le développement et les tests : docker compose up -d db
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: clubfoot
+      POSTGRES_USER: clubfoot
+      POSTGRES_PASSWORD: clubfoot
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clubfoot -d clubfoot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

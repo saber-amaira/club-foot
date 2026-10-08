@@ -1,0 +1,67 @@
+<main class="page">
+  <header>
+    <h1>Inscription au club de foot</h1>
+    <p class="intro">Remplis ce formulaire pour inscrire ton enfant. Nous te contacterons par email.</p>
+  </header>
+
+  @if (confirmation(); as texte) {
+    <p class="alerte succes" role="status">{{ texte }}</p>
+  }
+  @if (erreurGenerale(); as texte) {
+    <p class="alerte erreur" role="alert">{{ texte }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+    <fieldset>
+      <legend>L'enfant</legend>
+
+      <div class="champ">
+        <label for="prenom">Prénom</label>
+        <input id="prenom" type="text" formControlName="prenom" autocomplete="off">
+        @if (message('prenom'); as m) {
+          <span class="message">{{ m }}</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="nom">Nom</label>
+        <input id="nom" type="text" formControlName="nom" autocomplete="off">
+        @if (message('nom'); as m) {
+          <span class="message">{{ m }}</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="dateNaissance">Date de naissance</label>
+        <input id="dateNaissance" type="date" formControlName="dateNaissance" [max]="aujourdhui">
+        @if (message('dateNaissance'); as m) {
+          <span class="message">{{ m }}</span>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Le parent</legend>
+
+      <div class="champ">
+        <label for="emailParent">Email</label>
+        <input id="emailParent" type="email" formControlName="emailParent" autocomplete="email">
+        @if (message('emailParent'); as m) {
+          <span class="message">{{ m }}</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="telephoneParent">Téléphone</label>
+        <input id="telephoneParent" type="tel" formControlName="telephoneParent" autocomplete="tel">
+        @if (message('telephoneParent'); as m) {
+          <span class="message">{{ m }}</span>
+        }
+      </div>
+    </fieldset>
+
+    <button type="submit" [disabled]="envoiEnCours()">
+      {{ envoiEnCours() ? 'Envoi en cours…' : 'Inscrire' }}
+    </button>
+  </form>
+</main>

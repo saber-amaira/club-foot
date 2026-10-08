@@ -1,0 +1,37 @@
+# Blueprint Render : un service web (Spring Boot + Angular embarqué) et une base PostgreSQL.
+# Le déploiement est déclenché par la CI GitHub (deploy hook), pas par chaque commit.
+services:
+  - type: web
+    name: club-foot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: club-foot-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: club-foot-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: club-foot-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: club-foot-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: club-foot-db
+          property: password
+
+databases:
+  - name: club-foot-db
+    plan: free
+    databaseName: clubfoot
+    user: clubfoot

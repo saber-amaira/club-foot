@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+# Annule les exécutions devenues obsolètes sur la même branche
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (build + tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: clubfoot
+          POSTGRES_USER: clubfoot
+          POSTGRES_PASSWORD: clubfoot
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U clubfoot -d clubfoot"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_HOST: localhost
+      DB_PORT: "5432"
+      DB_NAME: clubfoot
+      DB_USER: clubfoot
+      DB_PASSWORD: clubfoot
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Installer Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Compiler
+        run: mvn -B -ntp -DskipTests compile
+
+      - name: Tests (Liquibase + API sur PostgreSQL)
+        run: mvn -B -ntp verify
+
+  frontend:
+    name: Frontend (build + tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Installer Node 22
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          # Ajouter « cache: npm » une fois package-lock.json commité
+
+      - name: Installer les dépendances
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Tests
+        run: npm test -- --no-watch
+
+      - name: Build de production
+        run: npm run build
+
+  docker:
+    name: Image Docker (comme sur Render)
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Construire l'image
+        run: docker build -t club-foot:ci .
+
+  deploy:
+    name: Déploiement Render
+    runs-on: ubuntu-latest
+    needs: [backend, frontend, docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Déclencher le déploiement
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "::error::Le secret RENDER_DEPLOY_HOOK_URL n'est pas défini (voir README)"
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST "$RENDER_DEPLOY_HOOK_URL" > /dev/null
+          echo "Déploiement Render déclenché."
