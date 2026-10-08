@@ -1,0 +1,211 @@
+.page {
+  padding-block: 3rem 1rem;
+}
+
+.entete-page {
+  margin-bottom: 1.75rem;
+}
+
+.surtitre {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--citron);
+}
+
+h1 {
+  font-size: clamp(2.2rem, 8vw, 4rem);
+  color: var(--blanc);
+}
+
+.accent {
+  color: var(--citron);
+}
+
+input,
+select {
+  padding: 0.75rem 0.9rem;
+  font: inherit;
+  color: var(--blanc);
+  background: rgba(255, 255, 255, 0.07);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.8rem;
+}
+
+select option {
+  color: var(--encre);
+}
+
+input::placeholder {
+  color: var(--gris);
+}
+
+/* --- Écran verrouillé --- */
+.verrou {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 26rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: calc(var(--rayon) * 1.4);
+  box-shadow: var(--ombre);
+}
+
+.verrou h2 {
+  font-size: 1.8rem;
+  color: var(--blanc);
+}
+
+.verrou p {
+  margin: 0;
+}
+
+.verrou p:not(.alerte) {
+  color: rgba(233, 245, 236, 0.8);
+}
+
+.verrou label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--citron);
+}
+
+.verrou .bouton {
+  margin-top: 0.5rem;
+}
+
+.alerte {
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  color: #7f1d1d;
+  background: #fee2e2;
+  border-radius: 0.8rem;
+}
+
+/* --- Liste --- */
+.outils {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.recherche {
+  flex: 1 1 16rem;
+}
+
+.bouton-petit {
+  padding: 0.7rem 1.1rem;
+  font-size: 0.8rem;
+}
+
+.compteur {
+  margin: 0 0 1rem;
+  color: var(--gris);
+}
+
+.compteur strong {
+  font-family: var(--police-titre);
+  font-size: 1.4rem;
+  color: var(--citron);
+}
+
+.liste {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.carte-inscrit {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.35rem 1rem;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--rayon);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  grid-row: span 2;
+  width: 3rem;
+  height: 3rem;
+  font-family: var(--police-titre);
+  font-style: italic;
+  color: var(--encre);
+  background: var(--citron);
+  border-radius: 50%;
+}
+
+.nom {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--blanc);
+}
+
+.details,
+.date {
+  font-size: 0.85rem;
+  color: var(--gris);
+}
+
+.categorie {
+  min-width: 4.2rem;
+  padding: 0.25rem 0.8rem;
+  text-align: center;
+  font-family: var(--police-titre);
+  font-style: italic;
+  color: var(--citron);
+  border: 2px solid var(--citron);
+  border-radius: 999px;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  grid-column: 2 / -1;
+  font-size: 0.9rem;
+}
+
+.contact a {
+  color: rgba(233, 245, 236, 0.9);
+  overflow-wrap: anywhere;
+}
+
+.date {
+  grid-column: 2 / -1;
+}
+
+@media (min-width: 52rem) {
+  .carte-inscrit {
+    grid-template-columns: auto 1.2fr auto 1.4fr auto;
+  }
+
+  .avatar {
+    grid-row: auto;
+  }
+
+  .contact,
+  .date {
+    grid-column: auto;
+  }
+
+  .date {
+    text-align: right;
+  }
+}
+
+.vide {
+  padding: 2rem;
+  color: var(--gris);
+  text-align: center;
+}

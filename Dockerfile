@@ -6,21 +6,23 @@ RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 COPY frontend/ ./
 RUN npm run build
 
-# ---- 2. Build du backend Spring Boot (frontend embarqué dans static/) ----
-FROM maven:3.9-eclipse-temurin-21 AS backend
+# ---- 2. Build du backend NestJS ----
+FROM node:22-alpine AS backend
 WORKDIR /app/backend
-COPY backend/pom.xml ./
-RUN mvn -B -ntp -q dependency:go-offline
-COPY backend/src ./src
-COPY --from=frontend /app/frontend/dist/frontend/browser/ ./src/main/resources/static/
-RUN mvn -B -ntp -q -DskipTests package
+COPY backend/package*.json ./
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+COPY backend/ ./
+RUN npm run build && npm prune --omit=dev
 
-# ---- 3. Image d'exécution ----
-FROM eclipse-temurin:21-jre
+# ---- 3. Image d'exécution : l'API Nest sert aussi le build Angular (public/) ----
+FROM node:22-alpine
+ENV NODE_ENV=production
 WORKDIR /app
-RUN useradd --system --uid 10001 appuser
-COPY --from=backend /app/backend/target/*.jar app.jar
-USER appuser
-EXPOSE 8080
-# Render injecte PORT ; MaxRAMPercentage garde de la marge sur les petites instances
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
+COPY --from=backend /app/backend/node_modules ./node_modules
+COPY --from=backend /app/backend/dist ./dist
+COPY --from=backend /app/backend/package.json ./package.json
+COPY --from=frontend /app/frontend/dist/frontend/browser ./public
+USER node
+EXPOSE 3000
+# Render injecte PORT ; la valeur par défaut de l'appli est 3000
+CMD ["node", "dist/main"]

@@ -1,12 +1,115 @@
+:root {
+  --pelouse-950: #031a0b;
+  --pelouse-900: #062a14;
+  --pelouse-800: #0a3d1e;
+  --pelouse-700: #0e5a2b;
+  --pelouse-500: #17a34a;
+  --citron: #c6ff3d;
+  --blanc: #ffffff;
+  --craie: #e9f5ec;
+  --encre: #08180f;
+  --gris: #8aa393;
+  --erreur: #ff7a7a;
+  --police-titre: "Arial Black", "Helvetica Neue", "Segoe UI", Impact, system-ui, sans-serif;
+  --police-texte: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --rayon: 1.25rem;
+  --ombre: 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color: #111827;
-  background: #f0fdf4;
+  min-height: 100vh;
+  font-family: var(--police-texte);
+  line-height: 1.5;
+  color: var(--craie);
+  background:
+    radial-gradient(900px 500px at 85% -5%, rgba(23, 163, 74, 0.35), transparent 60%),
+    radial-gradient(700px 400px at -10% 40%, rgba(198, 255, 61, 0.07), transparent 60%),
+    var(--pelouse-950);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--police-titre);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--citron);
+  outline-offset: 3px;
+}
+
+.conteneur {
+  width: min(100% - 2rem, 70rem);
+  margin-inline: auto;
+}
+
+/* Boutons partagés par toutes les pages */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.6rem;
+  font: 900 0.95rem/1 var(--police-titre);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.bouton:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.bouton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.bouton-principal {
+  color: var(--encre);
+  background: var(--citron);
+  box-shadow: 0 10px 24px -8px rgba(198, 255, 61, 0.55);
+}
+
+.bouton-contour {
+  color: var(--blanc);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.bouton-contour:hover {
+  color: var(--citron);
+  border-color: var(--citron);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }

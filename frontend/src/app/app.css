@@ -1,99 +1,72 @@
-.page {
-  max-width: 32rem;
-  margin: 0 auto;
-  padding: 2rem 1rem 3rem;
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(3, 26, 11, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
 }
 
-h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.6rem;
-  color: #14532d;
-}
-
-.intro {
-  margin: 0 0 1.5rem;
-  color: #4b5563;
-}
-
-fieldset {
-  margin: 0 0 1.25rem;
-  padding: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-}
-
-legend {
-  padding: 0 0.5rem;
-  font-weight: 600;
-  color: #166534;
-}
-
-.champ {
+.entete-interieur {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 0.7rem;
+}
+
+.marque {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--police-titre);
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.marque b {
+  color: var(--citron);
+  font-weight: 900;
+}
+
+.marque app-ballon {
+  width: 2rem;
+  height: 2rem;
+}
+
+nav {
+  display: flex;
   gap: 0.25rem;
-  margin-bottom: 0.9rem;
 }
 
-.champ:last-child {
-  margin-bottom: 0;
-}
-
-label {
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-input {
-  padding: 0.6rem 0.7rem;
-  font: inherit;
-  border: 1px solid #9ca3af;
-  border-radius: 0.4rem;
-}
-
-input:focus-visible {
-  outline: 2px solid #16a34a;
-  outline-offset: 1px;
-}
-
-.message {
-  font-size: 0.85rem;
-  color: #b91c1c;
-}
-
-button {
-  width: 100%;
-  padding: 0.8rem;
-  font: inherit;
+nav a {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #fff;
-  background: #16a34a;
-  border: 0;
-  border-radius: 0.4rem;
-  cursor: pointer;
+  color: rgba(233, 245, 236, 0.8);
+  text-decoration: none;
+  border-radius: 999px;
 }
 
-button:hover:not(:disabled) {
-  background: #15803d;
+nav a:hover {
+  color: var(--blanc);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: wait;
+nav a.actif {
+  color: var(--encre);
+  background: var(--citron);
 }
 
-.alerte {
-  margin: 0 0 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.4rem;
-}
-
-.alerte.succes {
-  color: #14532d;
-  background: #dcfce7;
-}
-
-.alerte.erreur {
-  color: #7f1d1d;
-  background: #fee2e2;
+.pied {
+  margin-top: 4rem;
+  padding-block: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--gris);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

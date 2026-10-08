@@ -3,8 +3,9 @@
 **/node_modules
 **/dist
 **/.angular
-**/target
 **/out-tsc
+**/coverage
+**/*.tsbuildinfo
 .idea
 .vscode
 .env

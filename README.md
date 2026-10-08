@@ -1,26 +1,28 @@
 # club-foot
 
-Petite application d'inscription des enfants au club de foot : une page Angular qui envoie le formulaire à une API Spring Boot, stocké dans PostgreSQL (schéma géré par Liquibase).
+Application d'inscription des enfants au club de foot, avec trois pages :
+
+- **Accueil** : présentation du club, étapes, catégories.
+- **Inscription** : formulaire (enfant + parent). La catégorie (U7 à U17) est calculée à partir de l'âge.
+- **Inscrits** : liste des inscrits avec recherche et filtre par catégorie, **protégée par une clé du club** (elle contient des coordonnées de parents).
 
 | Couche | Techno |
 |---|---|
-| Backend | Java 21, Spring Boot 4, Spring Data JPA, Liquibase, Maven |
-| Base de données | PostgreSQL 16 |
-| Frontend | Angular 21 (formulaire réactif, tests Vitest) |
+| Frontend | Angular 21 (routing, formulaires réactifs, tests Vitest) |
+| Backend | NestJS 11, TypeORM, class-validator |
+| Base de données | PostgreSQL 16 (migrations TypeORM appliquées au démarrage) |
 | CI | GitHub Actions |
-| Hébergement | Render (un service web Docker + une base PostgreSQL) |
+| Hébergement | Render (service web Docker + base PostgreSQL), déploiement automatique |
 
 ## Structure
 
 ```
-backend/    API Spring Boot (POST /api/inscriptions)
-frontend/   Application Angular (une page d'inscription)
-Dockerfile  Build complet : Angular -> embarqué dans le jar Spring Boot
+frontend/   Application Angular
+backend/    API NestJS : POST /api/inscriptions, GET /api/inscriptions (clé requise), GET /api/health
+Dockerfile  Build complet : Angular est embarqué dans l'image du backend (une seule URL, pas de CORS)
 render.yaml Blueprint Render (service web + base)
-.github/workflows/ci.yml  Build, tests, déploiement
+.github/workflows/ci.yml  Build et tests
 ```
-
-En production, Spring Boot sert directement le build Angular : une seule URL, pas de CORS.
 
 ## Lancer en local
 
@@ -28,34 +30,35 @@ En production, Spring Boot sert directement le build Angular : une seule URL, pa
 # 1. Base PostgreSQL
 docker compose up -d db
 
-# 2. Backend (http://localhost:8080)
-cd backend && mvn spring-boot:run
+# 2. Backend (http://localhost:3000)
+cd backend
+cp .env.example .env        # ADMIN_KEY=admin par défaut en local
+npm install
+npm run start:dev
 
 # 3. Frontend (http://localhost:4200, /api est proxifié vers le backend)
-cd frontend && npm install && npm start
+cd frontend
+npm install
+npm start
 ```
 
 Tests :
 
 ```bash
-cd backend && mvn verify          # nécessite le PostgreSQL du docker compose
+cd backend && npm test                     # nécessite le PostgreSQL du docker compose
 cd frontend && npm test -- --no-watch
 ```
 
-Le backend lit `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` (valeurs par défaut = docker compose).
+Conseil : après le premier `npm install`, commiter `backend/package-lock.json` et `frontend/package-lock.json` (la CI et le Dockerfile passent alors à `npm ci`, plus rapide et reproductible).
 
-## CI / déploiement
+## CI/CD
 
-À chaque `push` et `pull_request`, le workflow compile le backend, exécute ses tests contre un PostgreSQL, teste et compile Angular, puis vérifie que l'image Docker se construit. Sur `main`, si tout est vert, il déclenche le déploiement Render.
+À chaque `push` et `pull_request`, GitHub Actions compile et teste le backend (contre un vrai PostgreSQL), teste et compile Angular, puis vérifie que l'image Docker se construit.
 
-Mise en place (une seule fois) :
+Le déploiement est automatique : `render.yaml` utilise `autoDeployTrigger: checksPass`, donc Render redéploie la branche `main` dès que ces vérifications sont au vert, et jamais si elles échouent.
 
-1. Sur Render : **New > Blueprint**, choisir ce dépôt (il lit `render.yaml` et crée le service et la base).
-2. Dans le service Render : **Settings > Deploy Hook**, copier l'URL.
-3. Sur GitHub : **Settings > Secrets and variables > Actions > New repository secret** `RENDER_DEPLOY_HOOK_URL` = cette URL.
-
-Conseil : après un premier `npm install` dans `frontend/`, commiter `package-lock.json` (la CI et le Dockerfile utilisent alors `npm ci`).
+Mise en place (une seule fois) : sur Render, **New > Blueprint**, choisir ce dépôt. Render crée la base et le service à partir de `render.yaml`. La clé de la page « Inscrits » (`ADMIN_KEY`) est générée par Render : la lire dans **Environment** du service.
 
 ## Données personnelles
 
-L'application collecte des données concernant des mineurs et leurs parents. L'API n'expose volontairement aucun endpoint de lecture. Avant une mise en production réelle, prévoir l'information RGPD des familles et un accès sécurisé pour consulter les inscriptions.
+L'application collecte des données concernant des mineurs et leurs parents. Le formulaire d'inscription est public, la lecture est réservée à la clé du club. Avant une vraie mise en service, prévoir l'information RGPD des familles et un mode d'accès plus fin que la clé partagée (comptes nominatifs, par exemple).

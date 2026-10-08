@@ -1,34 +1,25 @@
-# Blueprint Render : un service web (Spring Boot + Angular embarqué) et une base PostgreSQL.
-# Le déploiement est déclenché par la CI GitHub (deploy hook), pas par chaque commit.
+# Blueprint Render : un service web (NestJS + Angular embarqué) et une base PostgreSQL.
+# Déploiement continu : Render redéploie automatiquement dès que les vérifications GitHub
+# (workflow CI) sont au vert sur la branche main.
 services:
   - type: web
     name: club-foot
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: free
-    healthCheckPath: /actuator/health
-    autoDeployTrigger: "off"
+    healthCheckPath: /api/health
+    autoDeployTrigger: checksPass
     envVars:
-      - key: DB_HOST
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
         fromDatabase:
           name: club-foot-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: club-foot-db
-          property: port
-      - key: DB_NAME
-        fromDatabase:
-          name: club-foot-db
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: club-foot-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: club-foot-db
-          property: password
+          property: connectionString
+      # Clé demandée par la page « Inscrits » : générée par Render, visible dans
+      # le tableau de bord du service (Environment).
+      - key: ADMIN_KEY
+        generateValue: true
 
 databases:
   - name: club-foot-db

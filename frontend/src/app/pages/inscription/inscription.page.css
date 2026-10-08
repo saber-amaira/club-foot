@@ -1,0 +1,184 @@
+.page {
+  max-width: 44rem;
+  padding-block: 3rem 1rem;
+}
+
+.entete-page {
+  margin-bottom: 2rem;
+}
+
+.surtitre {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--citron);
+}
+
+h1 {
+  font-size: clamp(2.2rem, 8vw, 4rem);
+  color: var(--blanc);
+}
+
+.accent {
+  color: var(--citron);
+}
+
+.chapeau {
+  margin: 1rem 0 0;
+  color: rgba(233, 245, 236, 0.8);
+}
+
+.carte {
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+  color: var(--encre);
+  background: var(--blanc);
+  border-radius: calc(var(--rayon) * 1.4);
+  box-shadow: var(--ombre);
+}
+
+fieldset {
+  padding: 0;
+  margin: 0 0 1.75rem;
+  border: 0;
+}
+
+legend {
+  padding: 0;
+  margin-bottom: 1rem;
+  font-family: var(--police-titre);
+  font-size: 1.1rem;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--pelouse-700);
+}
+
+.duo {
+  display: grid;
+  gap: 0 1rem;
+}
+
+@media (min-width: 38rem) {
+  .duo {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--pelouse-800);
+}
+
+input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  font: inherit;
+  color: var(--encre);
+  background: #f4faf5;
+  border: 2px solid #cfe3d3;
+  border-radius: 0.8rem;
+}
+
+input:focus-visible {
+  background: var(--blanc);
+  border-color: var(--pelouse-500);
+  outline: 3px solid rgba(23, 163, 74, 0.25);
+  outline-offset: 0;
+}
+
+input.ng-invalid.ng-touched {
+  border-color: #e05252;
+}
+
+.message {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c62828;
+}
+
+.apercu {
+  font-size: 0.85rem;
+  color: var(--pelouse-800);
+}
+
+.apercu-alerte {
+  font-weight: 600;
+  color: #b45309;
+}
+
+.pastille {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  margin-left: 0.15rem;
+  font-family: var(--police-titre);
+  font-style: italic;
+  color: var(--encre);
+  background: var(--citron);
+  border-radius: 999px;
+}
+
+.alerte {
+  padding: 0.8rem 1rem;
+  margin: 0 0 1.5rem;
+  font-weight: 600;
+  color: #7f1d1d;
+  background: #fee2e2;
+  border-radius: 0.8rem;
+}
+
+.bouton-sombre {
+  color: var(--citron);
+  background: var(--pelouse-900);
+}
+
+.bouton-sombre:hover:not(:disabled) {
+  background: var(--pelouse-700);
+}
+
+.bouton-contour-sombre {
+  color: var(--pelouse-900);
+  background: transparent;
+  border-color: var(--pelouse-900);
+}
+
+.bouton-large {
+  width: 100%;
+  padding-block: 1.1rem;
+}
+
+.confirmation {
+  text-align: center;
+}
+
+.confirmation-ballon {
+  width: 5rem;
+  height: 5rem;
+  margin-bottom: 1rem;
+}
+
+.confirmation h2 {
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  color: var(--pelouse-900);
+}
+
+.confirmation p {
+  max-width: 30rem;
+  margin: 0 auto 1.75rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}

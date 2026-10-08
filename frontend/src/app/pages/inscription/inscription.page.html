@@ -1,0 +1,95 @@
+<section class="page conteneur">
+  <header class="entete-page">
+    <p class="surtitre">Saison en cours</p>
+    <h1>Inscris ton <span class="accent">champion</span></h1>
+    <p class="chapeau">Les enfants de {{ ageMin }} à {{ ageMax }} ans sont les bienvenus.</p>
+  </header>
+
+  @if (inscrit(); as enfant) {
+    <div class="carte confirmation" role="status">
+      <app-ballon class="confirmation-ballon" />
+      <h2>C'est noté, {{ enfant.prenom }} !</h2>
+      <p>
+        {{ enfant.prenom }} {{ enfant.nom }} est inscrit(e) en catégorie
+        <strong class="pastille">{{ enfant.categorie }}</strong>. Le club vous recontactera très vite.
+      </p>
+      <div class="actions">
+        <button type="button" class="bouton bouton-sombre" (click)="nouvelleInscription()">
+          Inscrire un autre enfant
+        </button>
+        <a class="bouton bouton-contour-sombre" routerLink="/">Retour à l'accueil</a>
+      </div>
+    </div>
+  } @else {
+    <form class="carte" [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+      @if (erreurGenerale(); as texte) {
+        <p class="alerte" role="alert">{{ texte }}</p>
+      }
+
+      <fieldset>
+        <legend>L'enfant</legend>
+
+        <div class="duo">
+          <div class="champ">
+            <label for="prenom">Prénom</label>
+            <input id="prenom" type="text" formControlName="prenom" autocomplete="off" />
+            @if (message('prenom'); as m) {
+              <span class="message">{{ m }}</span>
+            }
+          </div>
+
+          <div class="champ">
+            <label for="nom">Nom</label>
+            <input id="nom" type="text" formControlName="nom" autocomplete="off" />
+            @if (message('nom'); as m) {
+              <span class="message">{{ m }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="champ">
+          <label for="dateNaissance">Date de naissance</label>
+          <input id="dateNaissance" type="date" formControlName="dateNaissance" [max]="aujourdhui" />
+          @if (message('dateNaissance'); as m) {
+            <span class="message">{{ m }}</span>
+          }
+          @if (dateSaisie()) {
+            @if (categorieEstimee(); as code) {
+              <span class="apercu">Catégorie : <strong class="pastille">{{ code }}</strong></span>
+            } @else {
+              <span class="apercu apercu-alerte">
+                Le club accueille les enfants de {{ ageMin }} à {{ ageMax }} ans.
+              </span>
+            }
+          }
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Le parent ou tuteur</legend>
+
+        <div class="duo">
+          <div class="champ">
+            <label for="emailParent">Email</label>
+            <input id="emailParent" type="email" formControlName="emailParent" autocomplete="email" />
+            @if (message('emailParent'); as m) {
+              <span class="message">{{ m }}</span>
+            }
+          </div>
+
+          <div class="champ">
+            <label for="telephoneParent">Téléphone</label>
+            <input id="telephoneParent" type="tel" formControlName="telephoneParent" autocomplete="tel" />
+            @if (message('telephoneParent'); as m) {
+              <span class="message">{{ m }}</span>
+            }
+          </div>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="bouton bouton-sombre bouton-large" [disabled]="envoiEnCours()">
+        {{ envoiEnCours() ? 'Envoi en cours…' : "Je m'inscris" }}
+      </button>
+    </form>
+  }
+</section>

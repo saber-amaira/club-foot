@@ -1,0 +1,88 @@
+<section class="page conteneur">
+  <header class="entete-page">
+    <p class="surtitre">Espace du club</p>
+    <h1>Les <span class="accent">inscrits</span></h1>
+  </header>
+
+  @if (session.cle()) {
+    <div class="outils">
+      <input
+        class="recherche"
+        type="search"
+        placeholder="Rechercher un nom, un prénom, un email…"
+        aria-label="Rechercher un inscrit"
+        (input)="rechercher($event)"
+      />
+      <select aria-label="Filtrer par catégorie" (change)="filtrer($event)">
+        <option value="">Toutes les catégories</option>
+        @for (categorie of categories; track categorie.code) {
+          <option [value]="categorie.code">{{ categorie.code }}</option>
+        }
+      </select>
+      <button type="button" class="bouton bouton-contour bouton-petit" (click)="charger()" [disabled]="chargement()">
+        Actualiser
+      </button>
+      <button type="button" class="bouton bouton-contour bouton-petit" (click)="deconnecter()">
+        Verrouiller
+      </button>
+    </div>
+
+    @if (erreur(); as texte) {
+      <p class="alerte" role="alert">{{ texte }}</p>
+    }
+
+    <p class="compteur" role="status">
+      @if (chargement()) {
+        Chargement…
+      } @else {
+        <strong>{{ visibles().length }}</strong> sur {{ inscrits().length }} inscrit(s)
+      }
+    </p>
+
+    <ul class="liste">
+      @for (inscrit of visibles(); track inscrit.id) {
+        <li class="carte-inscrit">
+          <span class="avatar" aria-hidden="true">{{ initiales(inscrit) }}</span>
+
+          <div class="identite">
+            <strong class="nom">{{ inscrit.prenom }} {{ inscrit.nom }}</strong>
+            <span class="details">
+              Né(e) le {{ inscrit.dateNaissance | date: 'dd/MM/yyyy' }}
+              @if (age(inscrit); as ans) {
+                · {{ ans }} ans
+              }
+            </span>
+          </div>
+
+          <span class="categorie">{{ inscrit.categorie }}</span>
+
+          <div class="contact">
+            <a [href]="'mailto:' + inscrit.emailParent">{{ inscrit.emailParent }}</a>
+            <a [href]="'tel:' + inscrit.telephoneParent">{{ inscrit.telephoneParent }}</a>
+          </div>
+
+          <span class="date">Inscrit le {{ inscrit.createdAt | date: 'dd/MM/yyyy' }}</span>
+        </li>
+      } @empty {
+        @if (!chargement()) {
+          <li class="vide">Aucun inscrit ne correspond.</li>
+        }
+      }
+    </ul>
+  } @else {
+    <form class="verrou" (submit)="connecter($event, cle.value)">
+      <h2>Accès réservé</h2>
+      <p>
+        Cette liste contient des coordonnées de parents. Saisis la clé du club pour l'afficher.
+      </p>
+      @if (erreur(); as texte) {
+        <p class="alerte" role="alert">{{ texte }}</p>
+      }
+      <label for="cle">Clé du club</label>
+      <input #cle id="cle" type="password" autocomplete="off" />
+      <button type="submit" class="bouton bouton-principal" [disabled]="chargement()">
+        {{ chargement() ? 'Vérification…' : 'Déverrouiller' }}
+      </button>
+    </form>
+  }
+</section>

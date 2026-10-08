@@ -1,0 +1,83 @@
+<section class="hero conteneur">
+  <div class="hero-texte">
+    <p class="surtitre"><span class="point"></span>Inscriptions ouvertes · 5 à 16 ans</p>
+    <h1>Rejoins<br>l'équipe<span class="accent">.</span></h1>
+    <p class="chapeau">
+      Le club de foot des enfants. Du premier ballon aux premiers matchs, on apprend en
+      s'amusant et on progresse ensemble.
+    </p>
+    <div class="actions">
+      <a class="bouton bouton-principal" routerLink="/inscription">Inscrire mon enfant</a>
+      <a class="bouton bouton-contour" routerLink="/" fragment="categories">Les catégories</a>
+    </div>
+  </div>
+
+  <div class="hero-visuel" aria-hidden="true">
+    <svg class="terrain" viewBox="0 0 320 460" focusable="false">
+      <g>
+        <rect x="0" y="0" width="320" height="460" fill="#0d5f2f" />
+        <rect x="0" y="57.5" width="320" height="57.5" fill="#117a3c" />
+        <rect x="0" y="172.5" width="320" height="57.5" fill="#117a3c" />
+        <rect x="0" y="287.5" width="320" height="57.5" fill="#117a3c" />
+        <rect x="0" y="402.5" width="320" height="57.5" fill="#117a3c" />
+      </g>
+      <g fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="3">
+        <rect x="14" y="14" width="292" height="432" rx="4" />
+        <line x1="14" y1="230" x2="306" y2="230" />
+        <circle cx="160" cy="230" r="46" />
+        <rect x="70" y="14" width="180" height="80" />
+        <rect x="115" y="14" width="90" height="32" />
+        <path d="M 127 94 A 46 46 0 0 0 193 94" />
+        <rect x="70" y="366" width="180" height="80" />
+        <rect x="115" y="414" width="90" height="32" />
+        <path d="M 127 366 A 46 46 0 0 1 193 366" />
+      </g>
+      <g fill="#ffffff" fill-opacity="0.85">
+        <circle cx="160" cy="230" r="3.5" />
+        <circle cx="160" cy="62" r="2.5" />
+        <circle cx="160" cy="398" r="2.5" />
+      </g>
+    </svg>
+    <app-ballon class="hero-ballon" />
+  </div>
+</section>
+
+<section class="bloc conteneur">
+  <h2>Comment ça marche</h2>
+  <ol class="etapes">
+    <li>
+      <span class="numero">01</span>
+      <h3>Remplis le formulaire</h3>
+      <p>Deux minutes suffisent : les infos de l'enfant et un contact parent.</p>
+    </li>
+    <li>
+      <span class="numero">02</span>
+      <h3>On te recontacte</h3>
+      <p>Le club prend en compte l'inscription et place ton enfant dans sa catégorie.</p>
+    </li>
+    <li>
+      <span class="numero">03</span>
+      <h3>À toi de jouer</h3>
+      <p>Chaussures, gourde, sourire : direction le terrain !</p>
+    </li>
+  </ol>
+</section>
+
+<section id="categories" class="bloc conteneur">
+  <h2>Toutes les catégories</h2>
+  <ul class="categories">
+    @for (categorie of categories; track categorie.code) {
+      <li>
+        <strong>{{ categorie.code }}</strong>
+        <span>{{ categorie.ageMin }}–{{ categorie.ageMax }} ans</span>
+      </li>
+    }
+  </ul>
+</section>
+
+<section class="conteneur">
+  <div class="bandeau">
+    <h2>Prêt pour le coup d'envoi ?</h2>
+    <a class="bouton bouton-principal" routerLink="/inscription">Je m'inscris</a>
+  </div>
+</section>
